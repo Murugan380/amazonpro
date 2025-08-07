@@ -7,53 +7,41 @@ if(!isset($_SESSION['uname']))
 }
 ?>
 <?php
-$statmsg="";
 $p0="";
 $p2="";
 $p3="";
-$filename="";
 $p5="";
 $p6="";
 $pp="";
  $targetdir="files/";
-if(isset($_POST['submit']) && !empty($_FILES["p4"]["name"]))
+if(isset($_POST['submit']))
 {
     $p1=$_POST['p1'];
     $p2=$_POST['p2'];
     $p3=$_POST['p3'];
     $p5=$_POST['p5'];
     $p6=$_POST['p6'];
-    $pp=$_POST['pp'];
-$randname=time().uniqid(rand());
-$filename=basename($_FILES["p4"]["name"]);
-$FN=$randname.$filename;
-$targetDirPath=$targetdir.$FN;
-$filetype=pathinfo($targetDirPath,PATHINFO_EXTENSION);
-$allowtype=array('png','jpg','jpeg','gif');
+    $batry=$_POST['battery'];
+    $discount=$_POST['discount'];
  $con=new mysqli("localhost","root","","murugansample");
      if($con->connect_error)
         echo "<script>alert('connection failed');</script>";
-if(in_array($filetype,$allowtype))
-{
     try
     {
-    $qur="insert into products(categoryId,productname,Brand,price,imgUrl,discribtion,stack) values('".$p1."','".$p2."','".$p3."','".$pp."','".$FN."','".$p5."','".$p6."')";
+    $qur="insert into products(categoryId,productname,Brand,imgUrl,discribtion,stack,battery,discount) values('".$p1."','".$p2."','".$p3."','".$FN."','".$p5."','".$p6."','".$batry."','".$discount."')";
     $res=mysqli_query($con,$qur);
     if($res==true)
     {
-        if(move_uploaded_file($_FILES['p4']['tmp_name'],$targetDirPath))
-        echo "<script>alert('file uploaded successfull')</script>";  
         echo "<script>alert('Insert successful');</script>";
     }
 }
 catch(Exception $e){
     echo "<script>alert('Duplicate Entery');</script>";
 }
+$con->close();
 }
 else{
     $statmsg="Invalid format";
-}
-$con->close();
 }
 ?>
 <!DOCTYPE html>
@@ -69,7 +57,7 @@ $con->close();
 <body>
     <div class="container">
         <a href="pageopen.php" class="btn btn-primary my-3">Home</a>
-        <form method="POST" action="products.php" enctype="multipart/form-data">
+        <form method="POST" action="products.php" enctype="multipart/form-data" auto>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">categoryId</label>
                 <input type="number" class="form-control" id="" name="p1" value="<?php echo $p1?>" required>
@@ -83,13 +71,8 @@ $con->close();
                 <input type="text" class="form-control" id="" name=p3 value="<?php echo $p3?>">
             </div>
             <div class="mb-3">
-             <label>Enter the Price</label>
-             <input type="number" name="pp" id="pp" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Upload Image</label>
-                <input type="file" class="form-control" id="" name="p4" required>
-                <div style="color:red;"><?php echo $statmsg ?></div>
+             <label>Enter the Battery size</label>
+             <input type="text" name="battery" id="battery" class="form-control">
             </div>
             <div class="form-floating mb-3">
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name=p5><?php echo $p5?></textarea>
@@ -99,16 +82,14 @@ $con->close();
                 <label for="exampleInputPassword1" class="form-label">Enter the stack</label>
                 <input type="number" class="form-control" id="" name=p6 value="<?php echo $p6?>">
             </div>
+            <div class="mb-3">
+             <label>Enter the Discount:</label>
+             <input type="number" name="discount" id="discount" class="form-control">
+            </div>
             <button type="submit" class="btn btn-primary" name="submit">Submit</button>
         </form>
     </div>
     <div class="container">
-<form method="POST" action="products.php" class="mt-3" >
-    <button type="submit" class="btn btn-primary" name="submit1">Display</button>
-    <a href="products.php" class="btn btn-primary">back</a>
-</form>
-
-
     <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -127,17 +108,15 @@ $con->close();
         <input type="text" name="c3" id="c3" class="form-control">
        <label>Brand Name:</label>
         <input type="text" name="c4" id="c4" class="form-control">
-        <label>Enter the Price</label>
-        <input type="number" name="cp" id="cp" class="form-control">
         <label>image</label>
-        <input type="text" id="c5" name=c5 class="form-control" readonly>
-       <label>change image:</label>
-        <input type="file" class="form-control" name=c51 id=c51>
-        <div id="fail"></div>
+        <label>Enter the Battery size</label>
+        <input type="text" name="bb" id="bb" class="form-control">
         <label>Discribtion</label>
   <textarea id="c6" name="c6" class="form-control"></textarea>
     <label>Enter the stack</label>
     <input type="number" id="c7" name="c7" class="form-control">
+    <label>Enter the Discount</label>
+        <input type="number" name="dd" id="dd" class="form-control">
   </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -155,7 +134,7 @@ $con->close();
             var ans=confirm("Are you sure");
             if(ans)
             {
-            window.location.assign("products.php?id="+id + "&img=" +img);
+            window.location.assign("products.php?id="+id);
             }
         }
         $(document).ready(function(){
@@ -169,18 +148,16 @@ $con->close();
                 $('#c2').val(data[1]);
                 $('#c3').val(data[2]);
                 $('#c4').val(data[3]);
-                $('#cp').val(data[4]);
-                $('#c5').val(data[6]);
-                $('#c6').val(data[7]);
-                $('#c7').val(data[8]);
+                $('#bb').val(data[4]);
+                $('#c6').val(data[5]);
+                $('#c7').val(data[6]);
+                $('#dd').val(data[7]);
             });
         });
     </script>
 </body>
 </html>
 <?php
-if(isset($_POST['submit1']))
-{
      $con=new mysqli("localhost","root","","murugansample");
     if($con->connect_error)
     {
@@ -189,7 +166,17 @@ if(isset($_POST['submit1']))
     $qur="select * from products";
     $res=mysqli_query($con,$qur);
     ?>
-    <table class="table bordered">
+    <table class="table bordered mx-auto text-center">
+        <th>Product ID</th>
+        <th>categoryId</th>
+        <th>productname</th>
+        <th>Brand</th>
+        <th>Battery</th>
+        <th>discribution</th>
+        <th>stack</th>
+        <th>Discount</th>
+        <th>edit</th>
+        <th>Delete</th>
     <?php
     while($row=$res->fetch_assoc())
     {
@@ -197,23 +184,22 @@ if(isset($_POST['submit1']))
         $catid=$row['categoryId'];
         $proname=$row['productname'];
         $brand=$row['Brand'];
-        $price=$row['price'];
-        $img=$row['imgUrl'];
+         $bat=$row['battery'];
         $disc=$row['discribtion'];
         $stack=$row['stack'];
+        $discc=$row['discount']
         ?>
         <tr>
             <td><?php echo $id ?></td>
             <td><?php echo $catid ?></td>
             <td><?php echo $proname ?></td>
             <td><?php echo $brand ?></td>
-            <td><?php echo $price ?></td>
-            <td><img src="files/<?php echo $img?>" width="50px" height="50px"></td>
-            <td><?php echo $img?></td>
+            <td><?php echo $bat ?></td>
             <td><?php echo $disc ?></td>
             <td><?php echo $stack?></td>
+            <td><?php echo $discc?></td>
             <td><button type="button" class="btnx btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" name="tb1">Edit</button></td>
-            <td><button type="submit" class="btn btn-danger" onclick="del('<?php echo $id?>','<?php echo $img?>')">Delete</button></td>
+            <td><button type="submit" class="btn btn-danger" onclick="del('<?php echo $id?>')">Delete</button></td>
         </tr>
         <?php
     }
@@ -221,11 +207,11 @@ if(isset($_POST['submit1']))
     </table>
     <?php
      $res->free();
-}
+?>
+<?php
 if(isset($_GET['id']))
 {
     $img=$_GET['img'];
-    $filepath="files/".$img;
     $con=new mysqli("localhost","root","","murugansample");
     if($con->connect_error)
     {
@@ -235,13 +221,6 @@ if(isset($_GET['id']))
     $qur="delete from products where Id='".$id."'";
     if($res=mysqli_query($con,$qur))
     {
-        if(file_exists($filepath))
-        {
-            if(unlink($filepath))
-            {
-                echo "<script>alert('file deleted')</script>";
-            }
-        }
         echo "<script>alert('deleted successful');
         window.location.href='products.php';
         </script>";
@@ -259,36 +238,14 @@ if(isset($_POST['savec']))
     $v2=$_POST['c2'];
     $v3=$_POST['c3'];
     $v4=$_POST['c4'];
-    $v5=$_POST['c5'];
-     $v6=$_POST['c6'];
+    $v6=$_POST['c6'];
     $v7=$_POST['c7'];
-    $pp=$_POST['cp'];
-    $dir="files/";
-    $rand=time().uniqid(rand());
-    $basename=basename($_FILES["c51"]["name"]);
-    $filename1=$rand.$basename;
-    if(!empty($_FILES["c51"]["name"]))
-    {
-        
-            $targetDirPath=$dir.$filename1;
-            $filetype=pathinfo($targetDirPath,PATHINFO_EXTENSION);
-        $allowtype=array('png','jpg','jpeg','gif');
-        if(in_array($filetype,$allowtype))
-        {
-            $delfun=$dir.$v5;
-            $v5=$filename1;
-            if(file_exists($delfun))
-                unlink($delfun);
-            if(move_uploaded_file($_FILES['c51']['tmp_name'],$targetDirPath))
-                echo "<script>alert('file uploaded successfull')</script>";  
-        }
-        else 
-        die("<script>alert('Invalid file format please update valid format')</script>");
-    }
+    $bb=$_POST['bb'];
+    $dd=$_POST['dd'];
     $con=new mysqli("localhost","root","","murugansample");
     if($con->connect_error)
         echo "<script>alert('connection failed');</script>";
-    $qur="update products set categoryId='".$v2."',productname='".$v3."',Brand='".$v4."',price='".$pp."',imgUrl='".$v5."',discribtion='".$v6."',stack='".$v7."' where Id='".$v1."'";
+    $qur="update products set categoryId='".$v2."',productname='".$v3."',Brand='".$v4."',battery='".$bb."',discribtion='".$v6."',stack='".$v7."',discount='".$dd."' where Id='".$v1."'";
     if($res=mysqli_query($con,$qur))
         echo "<script>alert('successfully updated');</script>";
     $con->close();

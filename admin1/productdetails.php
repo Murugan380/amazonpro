@@ -57,10 +57,6 @@ if(isset($_POST['submit']))
             </div>
             <button type="submit" class="btn btn-primary" name="submit">Submit</button>
         </form>
-        <form method="POST">
-            <button type="submit" class="btn btn-primary mt-3" name="show">Display</button>
-        </form>
-        
     </div>
         <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -115,8 +111,6 @@ if(isset($_POST['submit']))
 </body>
 </html>
 <?php
-if(isset($_POST['show']))
-{
     $con=new mysqli("localhost","root","","murugansample");
     if($con->connect_error)
     {
@@ -125,7 +119,13 @@ if(isset($_POST['show']))
     $qur="select * from productdetail";
     $res=mysqli_query($con,$qur);
     ?>
-    <table class="table">
+    <table class="table mx-auto text-center">
+        <th>Detail id</th>
+        <th>Product Id</th>
+        <th>detail key</th>
+        <th>detail value</th>
+        <th>edit</th>
+        <th>detete</th>
     <?php
     while($row=$res->fetch_assoc())
     {
@@ -148,7 +148,6 @@ if(isset($_POST['show']))
     </table>
     <?php
      $res->free();
-}
 if(isset($_GET['id']))
 {
     $con=new mysqli("localhost","root","","murugansample");
