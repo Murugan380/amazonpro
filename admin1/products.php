@@ -26,18 +26,12 @@ if(isset($_POST['submit']))
  $con=new mysqli("localhost","root","","murugansample");
      if($con->connect_error)
         echo "<script>alert('connection failed');</script>";
-    try
-    {
-    $qur="insert into products(categoryId,productname,Brand,imgUrl,discribtion,stack,battery,discount) values('".$p1."','".$p2."','".$p3."','".$FN."','".$p5."','".$p6."','".$batry."','".$discount."')";
+    $qur="insert into products(categoryId,productname,Brand,discribtion,stack,battery,discount) values('".$p1."','".$p2."','".$p3."','".$p5."','".$p6."','".$batry."','".$discount."')";
     $res=mysqli_query($con,$qur);
     if($res==true)
     {
         echo "<script>alert('Insert successful');</script>";
     }
-}
-catch(Exception $e){
-    echo "<script>alert('Duplicate Entery');</script>";
-}
 $con->close();
 }
 else{

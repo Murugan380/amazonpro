@@ -25,6 +25,7 @@ if(!isset($_SESSION['uname']))
     <a href="productdetails.php" class="btn btn-primary">Product Detail Insert</a>
     <a href="productcolor.php" class="btn btn-primary">Product Color Insert</a>
     <a href="ram.php" class="btn btn-primary">Ram & storage insert</a>
+    <a href="vieworde.php" class="btn btn-primary">view Order details</a>
     <a href="logout.php" class="btn btn-danger">logout</a>
 </body>
 </html>

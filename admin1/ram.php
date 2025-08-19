@@ -14,19 +14,19 @@
     <form method="POST" action="ram.php">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Product ID</label>
-            <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="t1">
+            <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="t1" required>
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label" >Ram</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" name="t2">
+            <input type="text" class="form-control" id="exampleInputPassword1" name="t2" required>
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label" >Storage</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" name="t3">
+            <input type="text" class="form-control" id="exampleInputPassword1" name="t3" required>
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label" >Price</label>
-            <input type="number" class="form-control" id="exampleInputPassword1" name="t4">
+            <input type="number" class="form-control" id="exampleInputPassword1" name="t4" required>
         </div>
         <button type="submit" class="btn btn-primary" name="submit">Submit</button>
     </form>
